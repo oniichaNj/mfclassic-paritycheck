@@ -17,11 +17,12 @@ func main() {
 		os.Exit(1)
 	}
 	f, err := os.Open(os.Args[1])
+	defer f.Close()
 	check(err)
 
 	buffer := make([]byte, 5)
 	_, err = f.Read(buffer)
-	f.Close()
+	check(err)
 
 	fmt.Printf("4 first bytes (UID): % X\n", buffer[0:4])
 	result := buffer[0] ^ buffer[1] ^ buffer[2] ^ buffer[3]
@@ -35,9 +36,9 @@ func main() {
 		if a == 121 || a == 89 {
 			buffer[4] = result
 			f, err := os.OpenFile(os.Args[1], os.O_RDWR, 0660)
+			defer f.Close()
 			check(err)
 			_, err = f.Write(buffer)
-			defer f.Close()
 		} else {
 			os.Exit(0)
 		}
