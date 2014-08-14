@@ -39,6 +39,7 @@ func main() {
 			defer f.Close()
 			check(err)
 			_, err = f.Write(buffer)
+			os.Exit(0)
 		} else {
 			os.Exit(0)
 		}
